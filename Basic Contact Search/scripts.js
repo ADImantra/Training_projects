@@ -10,6 +10,8 @@ const contactList = [
 
 ]
 
+const cleanedContactList = contactList.map((name) => name.toLowerCase());
+
 const request = document.querySelector("#contactRequest")
 const addition = document.querySelector("#contactAddition")
 const searchInput = document.querySelector("#search")
@@ -18,31 +20,44 @@ const triggerSearch = document.querySelector("#triggerSearch")
 const triggerAdd = document.querySelector("#triggerAdd")
 
 triggerSearch.addEventListener(`click`, contactSearcher);
+triggerAdd.addEventListener(`click`, contactAdder);
 
-function contactSearcher() {
-    const searchName = searchInput.toLowerCase();
+function contactSearcher() 
+{
+    const searchName = searchInput.value.toLowerCase();
     searchInput.value = ``;
-    searchInput,focus();
+    searchInput.focus();
     request.textContent = ``;
-    for (const contact of contactList) {
+    let found = false;
+
+    for (const contact of cleanedContactList) {
         const splitContact = contact.split(` `);
         for (const contents of splitContact) {
-            if contents.includes(searchName) {
-                request.textContent = `${searchInput}`;
+            if (contents.includes(searchName)) {
+                request.textContent = `${contact}`;
+                found = true;
                 break;
-            } else {
-                failedSearch();
-            }
-            
+            }  
+        }
+        if (found === true) {
+            break;
         }
     }
+
+    if (found !== true) {
+        failedSearch();
+    }
+    
 
 }
 
 function contactAdder() {
+    console.log(addInput.value)
+    const addition = addInput.value
+    contactList.push(addition)
 
 }
 
 function failedSearch(n) {
-    request.textContent = `Contact not Found`
+    request.textContent = `Contact not Found`;
 }
